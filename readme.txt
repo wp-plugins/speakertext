@@ -6,7 +6,7 @@ Requires at least: 2.7
 Tested up to: 3.0
 Stable tag: trunk
 
-Official SpeakerText plugin. SpeakerText turns your videos into text and automatically loads an interactive transcript beneath each video for SEO.
+The SpeakerText plugin automatically loads an interactive transcript beneath each of your videos, improving SEO. SpeakerText account required.
 
 == Description ==
 
