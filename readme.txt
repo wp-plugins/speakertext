@@ -40,14 +40,10 @@ Q: Do I have to copy & paste the transcripts onto my site?
 A: No! SpeakerText loads them automatically in a `<div>` tag beneath each one of your videos.
 
 Q: Why is there a space between my video and the transcript? 
-A: WordPress automatically adds a `<p>` tag after each embed and then adds a `</p>` tag before the SpeakerText `<div>`, causing there to be a space. It's really annoying and we're working on a more elegant solution, but for now you can eliminate the problem with this hack. 
-
-Paste the following code into your head tag:
-`<style> div.STplayer { margin-top: -1.5em; } </style>`
-You may need to play around with the exact margin number to get it perfect. 
+A: WordPress automatically adds a `<p>` tag after each embed and then adds a `</p>` tag before the SpeakerText `<div>`, causing there to be a space. You can specify a margin correction in the SpeakerText settings page.
 
 Q: Do SpeakerText transcripts affect my site SEO? 
-A:  Yes, SpeakerText transcripts load server-side and thus get indexed by Google for SEO!
+A: Yes, SpeakerText transcripts load server-side and thus get indexed by Google for SEO!
 
 == Upgrade Notice ==
 None.
@@ -59,6 +55,9 @@ None.
 
 = 0.1.0 =
 Initial Release. Supports YouTube.
+
+= 1.0.0 =
+Support for Blip.tv and Brightcove. New configuration parameter: remove space between video and transcript.
 
 == Other Notes ==
 To learn more, visit: http://speakertext.com/wordpress

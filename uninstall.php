@@ -1,6 +1,6 @@
 <?php
 
-	unregister_setting('speakertext_credentials', 'speakertext_public_key');
-	delete_option('speakertext_public_key');
+	unregister_setting('speakertext_options', 'speakertext_public_key');
+	unregister_setting('speakertext_options', 'speakertext_player_margin');
 	
 ?>
