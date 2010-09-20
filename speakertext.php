@@ -3,7 +3,7 @@
 Plugin Name: SpeakerText
 Plugin URI: http://speakertext.com/wordpress
 Description: Automatically load the SpeakerBar under any video in your SpeakerText library. Requires PHP5 and Wordpress 2.7 or later.
-Version: 1.0.0
+Version: 1.0.1
 Author: Tyler Kieft
 Author URI: http://speakertext.com
 

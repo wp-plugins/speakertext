@@ -59,6 +59,9 @@ Initial Release. Supports YouTube.
 = 1.0.0 =
 Support for Blip.tv and Brightcove. New configuration parameter: remove space between video and transcript.
 
+= 1.0.1 =
+Support more Blip embeds.
+
 == Other Notes ==
 To learn more, visit: http://speakertext.com/wordpress
 
