@@ -62,6 +62,9 @@ Support for Blip.tv and Brightcove. New configuration parameter: remove space be
 = 1.0.1 =
 Support more Blip embeds.
 
+= 1.1.0 =
+Support for JW player.
+
 == Other Notes ==
 To learn more, visit: http://speakertext.com/wordpress
 

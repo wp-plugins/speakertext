@@ -5,10 +5,12 @@ class SpeakerText
 	const YOUTUBE_RE = "/<object(.*?)<embed.*? src=[\"']http:\/\/(www.)?youtube.com\/v\/(.*?)([&\?].*?)[\"'](.*?)<\/object>/m";
 	const BRIGHTCOVE_RE = "/brightcove(.*?)@videoPlayer([\"'] *value)?=[\"']?(\d+)(.*?)<\/object>/im"; // m makes . match newlines
 	const BLIP_RE = "/<embed(.*?)src=[\"']http:\/\/blip.tv\/play\/([a-zA-Z0-9]*)(.*?)[\"'](.*?)<\/embed>(.*?<\/object>)?/m";
+	const JW_RE = "/<object.*?file=(.*?)[&\"].*?<\/object>/";
 	
 	const YOUTUBE_PLATFORM = 1;
 	const BRIGHTCOVE_PLATFORM = 3;
 	const BLIP_PLATFORM = 4;
+	const SELF_PLATFORM = 7;
 	
 	function SpeakerText() {
 		return true;
@@ -19,10 +21,12 @@ class SpeakerText
 		unregister_setting('speakertext_options', 'speakertext_player_margin');
 	}
 	
+	
 	function filter_the_content($content) {
 		$content = $this->filter_videos($content, self::YOUTUBE_RE, self::YOUTUBE_PLATFORM, 3);
 		$content = $this->filter_videos($content, self::BRIGHTCOVE_RE, self::BRIGHTCOVE_PLATFORM, 3);
 		$content = $this->filter_videos($content, self::BLIP_RE, self::BLIP_PLATFORM, 2);
+		$content = $this->filter_videos($content, self::JW_RE, self::SELF_PLATFORM, 1);
 		return $content;
 	}
 	
@@ -33,6 +37,11 @@ class SpeakerText
 		$global_offset = 0;
 		foreach($matches as $match) {
 			$video_id = $match[$match_num][0];
+			
+			if( $platform == self::SELF_PLATFORM ) {
+				$video_id = sha1(basename($video_id));
+			}
+			
 			$offset = $global_offset + $match[0][1] + strlen($match[0][0]);
 
 			// Add in SpeakerText text embed right after video
@@ -57,7 +66,8 @@ class SpeakerText
 	}
 	
 	function add_speakerbar_scripts() {
-		wp_enqueue_script('st_player', 'http://jb.speakertext.com/player/jquery.speakertext.js', array('jquery'), "1.0");
+		#wp_enqueue_script('st_player', 'http://jb.speakertext.com/player/jquery.speakertext.js', array('jquery'), "1.0");
+		wp_enqueue_script('st_player', 'http://127.0.0.1:3000/player/jquery.speakertext.full.js', array('jquery'), "1.0");
 		echo "<script>var STapiKey = 'STEMBEDAPIKEY';</script>\n";
 	}
 	
