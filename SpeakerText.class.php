@@ -66,8 +66,7 @@ class SpeakerText
 	}
 	
 	function add_speakerbar_scripts() {
-		#wp_enqueue_script('st_player', 'http://jb.speakertext.com/player/jquery.speakertext.js', array('jquery'), "1.0");
-		wp_enqueue_script('st_player', 'http://127.0.0.1:3000/player/jquery.speakertext.full.js', array('jquery'), "1.0");
+		wp_enqueue_script('st_player', 'http://jb.speakertext.com/player/jquery.speakertext.js', array('jquery'), "1.0");
 		echo "<script>var STapiKey = 'STEMBEDAPIKEY';</script>\n";
 	}
 	
