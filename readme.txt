@@ -65,6 +65,9 @@ Support more Blip embeds.
 = 1.1.0 =
 Support for JW player.
 
+= 1.1.1 =
+Fixed bug in 1.1.0 that caused the player not to load.
+
 == Other Notes ==
 To learn more, visit: http://speakertext.com/wordpress
 
