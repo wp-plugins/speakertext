@@ -53,20 +53,23 @@ None.
 
 == Changelog ==
 
-= 0.1.0 =
-Initial Release. Supports YouTube.
+= 1.2.0 =
+Support for Ooyala.
 
-= 1.0.0 =
-Support for Blip.tv and Brightcove. New configuration parameter: remove space between video and transcript.
-
-= 1.0.1 =
-Support more Blip embeds.
+= 1.1.1 =
+Fixed bug in 1.1.0 that caused the player not to load.
 
 = 1.1.0 =
 Support for JW player.
 
-= 1.1.1 =
-Fixed bug in 1.1.0 that caused the player not to load.
+= 1.0.1 =
+Support more Blip embeds.
+
+= 1.0.0 =
+Support for Blip.tv and Brightcove. New configuration parameter: remove space between video and transcript.
+
+= 0.1.0 =
+Initial Release. Supports YouTube.
 
 == Other Notes ==
 To learn more, visit: http://speakertext.com/wordpress

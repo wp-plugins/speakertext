@@ -2,15 +2,20 @@
 class SpeakerText 
 { 
 	// All of the Regular Expressions we use to match videos
-	const YOUTUBE_RE = "/<object(.*?)<embed.*? src=[\"']http:\/\/(www.)?youtube.com\/v\/(.*?)([&\?].*?)[\"'](.*?)<\/object>/m";
-	const BRIGHTCOVE_RE = "/brightcove(.*?)@videoPlayer([\"'] *value)?=[\"']?(\d+)(.*?)<\/object>/im"; // m makes . match newlines
-	const BLIP_RE = "/<embed(.*?)src=[\"']http:\/\/blip.tv\/play\/([a-zA-Z0-9]*)(.*?)[\"'](.*?)<\/embed>(.*?<\/object>)?/m";
-	const JW_RE = "/<object.*?file=(.*?)[&\"].*?<\/object>/";
+	// /s makes . match newlines
+	const YOUTUBE_RE = "/<object(.*?)<embed.*? src=[\"']http:\/\/(www.)?youtube.com\/v\/(.*?)([&\?].*?)[\"'](.*?)<\/object>/s";
+	const BRIGHTCOVE_RE = "/brightcove(.*?)@videoPlayer([\"'] *value)?=[\"']?(\d+)(.*?)<\/object>/is"; 
+	const BLIP_RE = "/<embed(.*?)src=[\"']http:\/\/blip.tv\/play\/([a-zA-Z0-9]*)(.*?)[\"'](.*?)<\/embed>(.*?<\/object>)?/s";
+	const JW_RE = "/<object.*?file=(.*?)[&\"].*?<\/object>/s";
+	const OOYALA_RE = "/<script.*?src=\"https?:\/\/player.ooyala.com\/player.js\?(.*?)embedCode=(.*?)[\"&].*?<\/noscript>/s";
 	
 	const YOUTUBE_PLATFORM = 1;
 	const BRIGHTCOVE_PLATFORM = 3;
 	const BLIP_PLATFORM = 4;
+	const OOYALA_PLATFORM = 5;
 	const SELF_PLATFORM = 7;
+	
+	const OOYALA_JS_INSERT = "callback=st_ooyala_callback&";
 	
 	function SpeakerText() {
 		return true;
@@ -27,6 +32,7 @@ class SpeakerText
 		$content = $this->filter_videos($content, self::BRIGHTCOVE_RE, self::BRIGHTCOVE_PLATFORM, 3);
 		$content = $this->filter_videos($content, self::BLIP_RE, self::BLIP_PLATFORM, 2);
 		$content = $this->filter_videos($content, self::JW_RE, self::SELF_PLATFORM, 1);
+		$content = $this->filter_videos($content, self::OOYALA_RE, self::OOYALA_PLATFORM, 2);
 		return $content;
 	}
 	
@@ -40,6 +46,13 @@ class SpeakerText
 			
 			if( $platform == self::SELF_PLATFORM ) {
 				$video_id = sha1(basename($video_id));
+			}
+			
+			if( $platform == self::OOYALA_PLATFORM && strpos($match[0][0], "callback") === false ) {
+				// Add in javascript callback after all url params
+				$offset = $global_offset + $match[1][1];
+				$content = substr($content, 0, $offset) . self::OOYALA_JS_INSERT . substr($content, $offset);
+				$global_offset += strlen(self::OOYALA_JS_INSERT);
 			}
 			
 			$offset = $global_offset + $match[0][1] + strlen($match[0][0]);
@@ -66,7 +79,9 @@ class SpeakerText
 	}
 	
 	function add_speakerbar_scripts() {
-		wp_enqueue_script('st_player', 'http://jb.speakertext.com/player/jquery.speakertext.js', array('jquery'), "1.0");
+		#wp_enqueue_script('st_player', 'http://jb.speakertext.com/player/jquery.speakertext.js', array('jquery'), "1.0");
+		wp_enqueue_script('st_player', 'http://127.0.0.1:3000/player/jquery.speakertext.full.js', array('jquery'), "1.0");
+		
 		echo "<script>var STapiKey = 'STEMBEDAPIKEY';</script>\n";
 	}
 	
