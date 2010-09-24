@@ -53,6 +53,9 @@ None.
 
 == Changelog ==
 
+= 1.2.1 =
+Fix an issue with certain embeds not working.
+
 = 1.2.0 =
 Support for Ooyala.
 
