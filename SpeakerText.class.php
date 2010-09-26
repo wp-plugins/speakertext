@@ -21,9 +21,19 @@ class SpeakerText
 		return true;
 	}
 	
+	function activate() {
+		if( get_option("speakertext_default_height") === false )
+			add_option("speakertext_default_height", 210);
+			
+		if( get_option("speakertext_initial_state") === false )
+			add_option("speakertext_initial_state", "open");
+	}
+	
 	function deactivate() {
 		unregister_setting('speakertext_options', 'speakertext_public_key');
 		unregister_setting('speakertext_options', 'speakertext_player_margin');
+		unregister_setting("speakertext_options", "speakertext_default_height");
+		unregister_setting("speakertext_options", "speakertext_initial_state");
 	}
 	
 	
@@ -80,12 +90,28 @@ class SpeakerText
 	
 	function add_speakerbar_scripts() {
 		wp_enqueue_script('st_player', 'http://jb.speakertext.com/player/jquery.speakertext.js', array('jquery'), "1.0");
-		echo "<script>var STapiKey = 'STEMBEDAPIKEY';</script>\n";
+		
+		$is = get_option('speakertext_initial_state', 'open');
+		$dh = get_option('speakertext_default_height', 210);
+		
+		if( $is == "" )
+			$is = "open";
+		
+		if( $dh == "" )
+			$dh = 210;
+		
+		echo "<script>";
+		echo "  var STapiKey = 'STEMBEDAPIKEY';";
+		echo "  var STglobalSettings = {initialState: '".$is."', defaultHeight: ".$dh."};";
+		echo "</script>\n";
 	}
 	
 	function add_speakerbar_styles() {
 		wp_enqueue_style('st_player_style', 'http://jb.speakertext.com/player/speakertext.css');
-		echo "<style>div.STplayer { margin-top: -" . get_option('speakertext_player_margin') . "; }</style>\n";
+
+		$pm = get_option('speakertext_player_margin');
+		if( $pm != "" )
+			echo "<style>div.STplayer { margin-top: -" . $pm . "; }</style>\n";
 	}
 	
 	/* BELOW IS TO MANAGE SPEAKERTEXT PLUGIN SETTINGS */
@@ -98,11 +124,15 @@ class SpeakerText
 	function register_settings() {
 		register_setting("speakertext_options", "speakertext_public_key");
 		register_setting("speakertext_options", "speakertext_player_margin");
+		register_setting("speakertext_options", "speakertext_default_height");
+		register_setting("speakertext_options", "speakertext_initial_state");
 		
 		add_settings_section("speakertext_credentials", "Credentials", array($this, 'credentials_text'), 'speakertext');
 		add_settings_field('public_key', 'Public Key', array($this, 'public_key_text'), 'speakertext', 'speakertext_credentials');
 		
 		add_settings_section("speakertext_options", "Options", array($this, 'options_text'), 'speakertext');
+		add_settings_field('default_height', 'Default Transcript Height', array($this, 'default_height_text'), 'speakertext', 'speakertext_options');
+		add_settings_field('initial_state', 'Transcript Starts', array($this, 'initial_state_text'), 'speakertext', 'speakertext_options');
 		add_settings_field('player_margin', 'Player Margin Correction', array($this, 'player_margin_text'), 'speakertext', 'speakertext_options');
 	}
 	
@@ -111,11 +141,6 @@ class SpeakerText
 	}
 	
 	function options_text() {
-		echo '<p>Wordpress\' default formatting causes there to be a space between the SpeakerText interactive transcript player and the video.</p>';
-					
-		echo '<p>To fix this, we can move the transcript up using CSS. The value specified below should be approximately equal to
-					the bottom margin of your paragraph tags.  Common values are 1em, 1.5em, or 2em.  You can also specify the value in pixels, such as 24px. 
-					You may have to play around with this number to get the correct value for your theme.</p>';
 	}
 	
 	function public_key_text() {
@@ -126,6 +151,25 @@ class SpeakerText
 	function player_margin_text() {
 		$pm = get_option('speakertext_player_margin');
 		echo "<input id='player_margin' name='speakertext_player_margin' size='5' type='text' value='{$pm}' />";
+		
+		echo '<p>Wordpress\' default formatting causes there to be a space between the SpeakerText interactive transcript player and the video.</p>';
+					
+		echo '<p>To fix this, we can move the transcript up using CSS. The value specified below should be approximately equal to
+					the bottom margin of your paragraph tags.  Common values are <code>1em</code>, <code>1.5em</code>, or <code>2em</code>.  You can also specify the value in pixels, such as <code>24px</code>. 
+					You may have to play around with this number to get the correct value for your theme.</p>';
+	}
+	
+	function default_height_text() {
+		$dh = get_option('speakertext_default_height');
+		echo "<input id='default_height' name='speakertext_default_height' size='5' type='text' value='{$dh}' />px";
+	}
+	
+	function initial_state_text() {
+		$is = get_option('speakertext_initial_state');
+		$open_checked = $is == "open" ? "checked" : "";
+		$closed_checked = $is == "closed" ? "checked" : "";
+		
+		echo "<label><input ".$open_checked." id='speakertext_initial_state_open' name='speakertext_initial_state' type='radio' value='open' /> Open</label><br><label><input ".$closed_checked." id='speakertext_initial_state_closed' name='speakertext_initial_state' type='radio' value='closed' /> Closed</label>";
 	}
 	
 	function speakertext_settings_page() { ?>

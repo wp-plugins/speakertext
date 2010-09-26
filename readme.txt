@@ -53,6 +53,9 @@ None.
 
 == Changelog ==
 
+= 1.3.0 =
+Allow specifying transcript loading defaults (open/closed, default height).
+
 = 1.2.1 =
 Fix an issue with certain embeds not working.
 
