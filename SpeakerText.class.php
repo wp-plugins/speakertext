@@ -27,6 +27,9 @@ class SpeakerText
 			
 		if( get_option("speakertext_initial_state") === false )
 			add_option("speakertext_initial_state", "open");
+			
+		if( get_option("speakertext_load_jquery") === false )
+			add_option("speakertext_load_jquery", "yes");
 	}
 	
 	function deactivate() {
@@ -34,6 +37,7 @@ class SpeakerText
 		unregister_setting('speakertext_options', 'speakertext_player_margin');
 		unregister_setting("speakertext_options", "speakertext_default_height");
 		unregister_setting("speakertext_options", "speakertext_initial_state");
+		unregister_setting("speakertext_options", "speakertext_load_jquery");
 	}
 	
 	
@@ -88,11 +92,18 @@ class SpeakerText
 		}
 	}
 	
-	function add_speakerbar_scripts() {
-		wp_enqueue_script('st_player', 'http://jb.speakertext.com/player/jquery.speakertext.js', array('jquery'), "1.0");
-		
+	function add_speakerbar_scripts() {		
 		$is = get_option('speakertext_initial_state', 'open');
 		$dh = get_option('speakertext_default_height', 210);
+		$lj = get_option('speakertext_load_jquery', 'yes');
+		
+		if( $lj == "no" ) {
+			wp_enqueue_script('st_player', 'http://jb.speakertext.com/player/jquery.speakertext.js', array(), "1.0");
+		}
+		else {
+			wp_enqueue_script('st_player', 'http://jb.speakertext.com/player/jquery.speakertext.js', array('jquery'), "1.0");
+		}
+		
 		
 		if( $is == "" )
 			$is = "open";
@@ -126,6 +137,7 @@ class SpeakerText
 		register_setting("speakertext_options", "speakertext_player_margin");
 		register_setting("speakertext_options", "speakertext_default_height");
 		register_setting("speakertext_options", "speakertext_initial_state");
+		register_setting("speakertext_options", "speakertext_load_jquery");
 		
 		add_settings_section("speakertext_credentials", "Credentials", array($this, 'credentials_text'), 'speakertext');
 		add_settings_field('public_key', 'Public Key', array($this, 'public_key_text'), 'speakertext', 'speakertext_credentials');
@@ -133,6 +145,7 @@ class SpeakerText
 		add_settings_section("speakertext_options", "Options", array($this, 'options_text'), 'speakertext');
 		add_settings_field('default_height', 'Default Transcript Height', array($this, 'default_height_text'), 'speakertext', 'speakertext_options');
 		add_settings_field('initial_state', 'Transcript Starts', array($this, 'initial_state_text'), 'speakertext', 'speakertext_options');
+		add_settings_field('load_jquery', 'Load jQuery', array($this, 'load_jquery_text'), 'speakertext', 'speakertext_options');
 		add_settings_field('player_margin', 'Player Margin Correction', array($this, 'player_margin_text'), 'speakertext', 'speakertext_options');
 	}
 	
@@ -146,6 +159,16 @@ class SpeakerText
 	function public_key_text() {
 		$spk = get_option('speakertext_public_key');
 		echo "<input id='public_key' name='speakertext_public_key' size='55' type='text' value='{$spk}' />";
+	}
+	
+	function load_jquery_text() {
+		$lj = get_option('speakertext_load_jquery');
+		$no_checked = $lj == "no" ? "checked" : "";
+		$yes_checked = $no_checked == "checked" ? "" : "checked";
+		
+		echo "<label><input ".$yes_checked." id='speakertext_load_jquery_yes' name='speakertext_load_jquery' type='radio' value='yes' /> Yes</label><br><label><input ".$no_checked." id='speakertext_load_jquery_no' name='speakertext_load_jquery' type='radio' value='no' /> No</label>";
+		
+		echo "<p>SpeakerText will ask Wordpress to load the jQuery javascript library. If your theme or already installed plugins load their own version of jQuery, this could cause them not to work.  If you experience issues, please try turning this option off.</p>";
 	}
 	
 	function player_margin_text() {

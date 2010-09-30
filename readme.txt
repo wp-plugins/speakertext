@@ -53,6 +53,9 @@ None.
 
 == Changelog ==
 
+= 1.3.1 =
+New option to turn off jQuery loading, if you already have jQuery in your theme or other plugins.
+
 = 1.3.0 =
 Allow specifying transcript loading defaults (open/closed, default height).
 
