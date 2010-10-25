@@ -53,6 +53,9 @@ None.
 
 == Changelog ==
 
+= 1.4.0 =
+Loads SpeakerText Javascript in page footer only when SpeakerText videos are detected for better performance.
+
 = 1.3.1 =
 New option to turn off jQuery loading, if you already have jQuery in your theme or other plugins.
 

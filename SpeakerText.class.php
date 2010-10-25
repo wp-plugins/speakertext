@@ -17,7 +17,10 @@ class SpeakerText
 	
 	const OOYALA_JS_INSERT = "callback=st_ooyala_callback&";
 	
+	var $foundTranscript;
+	
 	function SpeakerText() {
+		$this->foundTranscript = false;
 		return true;
 	}
 	
@@ -87,6 +90,7 @@ class SpeakerText
 		
 		if( ! is_wp_error( $response ) ) {
 			if( wp_remote_retrieve_response_code( $response ) == 200 ) {
+				$this->foundTranscript = true;
 				return wp_remote_retrieve_body( $response );
 			}
 		}
@@ -98,10 +102,11 @@ class SpeakerText
 		$lj = get_option('speakertext_load_jquery', 'yes');
 		
 		if( $lj == "no" ) {
-			wp_enqueue_script('st_player', 'http://jb.speakertext.com/player/jquery.speakertext.js', array(), "1.0");
+			#wp_enqueue_script('st_player', 'http://jb.speakertext.com/player/jquery.speakertext.js', array(), "1.0");
 		}
 		else {
-			wp_enqueue_script('st_player', 'http://jb.speakertext.com/player/jquery.speakertext.js', array('jquery'), "1.0");
+			wp_enqueue_script('jquery');
+			#wp_enqueue_script('st_player', 'http://jb.speakertext.com/player/jquery.speakertext.js', array('jquery'), "1.0");
 		}
 		
 		
@@ -115,6 +120,11 @@ class SpeakerText
 		echo "  var STapiKey = 'STEMBEDAPIKEY';";
 		echo "  var STglobalSettings = {initialState: '".$is."', defaultHeight: ".$dh."};";
 		echo "</script>\n";
+	}
+	
+	function add_footer_script() {
+		if( $this->foundTranscript) 
+			echo '<script src="http://jb.speakertext.com/player/jquery.speakertext.js"></script>';
 	}
 	
 	function add_speakerbar_styles() {
