@@ -53,6 +53,9 @@ None.
 
 == Changelog ==
 
+= 1.4.1 =
+Change the way SpeakerText loads to be compatible with more setups.
+
 = 1.4.0 =
 Loads SpeakerText Javascript in page footer only when SpeakerText videos are detected for better performance.
 

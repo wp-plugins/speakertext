@@ -17,10 +17,14 @@ class SpeakerText
 	
 	const OOYALA_JS_INSERT = "callback=st_ooyala_callback&";
 	
-	var $foundTranscript;
+	var $plugin_prefix;
+	var $plugin_name;
+	var $plugin_dir;
 	
-	function SpeakerText() {
-		$this->foundTranscript = false;
+	function SpeakerText($pp, $pn, $pd) {
+		$this->plugin_prefix = $pp;
+		$this->plugin_name = $pn;
+		$this->plugin_dir = $pd;
 		return true;
 	}
 	
@@ -90,7 +94,6 @@ class SpeakerText
 		
 		if( ! is_wp_error( $response ) ) {
 			if( wp_remote_retrieve_response_code( $response ) == 200 ) {
-				$this->foundTranscript = true;
 				return wp_remote_retrieve_body( $response );
 			}
 		}
@@ -102,11 +105,10 @@ class SpeakerText
 		$lj = get_option('speakertext_load_jquery', 'yes');
 		
 		if( $lj == "no" ) {
-			#wp_enqueue_script('st_player', 'http://jb.speakertext.com/player/jquery.speakertext.js', array(), "1.0");
+			wp_enqueue_script('st_snippet', $this->plugin_dir . '/snippet.js', array(), '1.0');
 		}
 		else {
-			wp_enqueue_script('jquery');
-			#wp_enqueue_script('st_player', 'http://jb.speakertext.com/player/jquery.speakertext.js', array('jquery'), "1.0");
+			wp_enqueue_script('st_snippet', $this->plugin_dir . '/snippet.js', array('jquery'), '1.0');
 		}
 		
 		
@@ -115,16 +117,11 @@ class SpeakerText
 		
 		if( $dh == "" )
 			$dh = 210;
-		
-		echo "<script>";
-		echo "  var STapiKey = 'STEMBEDAPIKEY';";
-		echo "  var STglobalSettings = {initialState: '".$is."', defaultHeight: ".$dh."};";
+			
+		echo "<script>\n";
+		echo "	var STapiKey = 'STEMBEDAPIKEY';\n";
+		echo "	var STglobalSettings = {initialState: '".$is."', defaultHeight: ".$dh."};\n";
 		echo "</script>\n";
-	}
-	
-	function add_footer_script() {
-		if( $this->foundTranscript) 
-			echo '<script src="http://jb.speakertext.com/player/jquery.speakertext.js"></script>';
 	}
 	
 	function add_speakerbar_styles() {

@@ -3,7 +3,7 @@
 Plugin Name: SpeakerText
 Plugin URI: http://speakertext.com/wordpress
 Description: Automatically load the SpeakerBar under any video in your SpeakerText library. Requires PHP5 and Wordpress 2.7 or later.
-Version: 1.4.0
+Version: 1.4.1
 Author: Tyler Kieft
 Author URI: http://speakertext.com
 
@@ -19,7 +19,7 @@ $plugin_file = $plugin_name . '.php';
 $plugin_class = 'SpeakerText';
 $plugin_class_file = $plugin_class . '.class.php'; 
 $plugin_prefix = $plugin_name . '_'; // define the plugin prefix we are going to use for naming all classes, ids, actions etc... this is done to avoid conflicts with other plugins
-$plugin_dir = get_bloginfo('url').'/wp-content/plugins/'.$plugin_name;
+$plugin_dir = trailingslashit( get_bloginfo('wpurl') ) . PLUGINDIR . '/' . $plugin_name;
 
 // Include the class file
 if (!class_exists($plugin_class)) {		
@@ -52,7 +52,7 @@ if(isset($speakertext)){
 
 	add_filter('the_content', array($speakertext, 'filter_the_content'), 1000);
 	
-	add_action('wp_footer', array($speakertext, 'add_footer_script'));
+	//add_action('wp_footer', array($speakertext, 'add_footer_script'));
 }
 	
 ?>
