@@ -53,6 +53,9 @@ None.
 
 == Changelog ==
 
+= 1.4.2 =
+Support more YouTube embed codes.
+
 = 1.4.1 =
 Change the way SpeakerText loads to be compatible with more setups.
 

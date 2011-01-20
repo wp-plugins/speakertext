@@ -3,7 +3,7 @@ class SpeakerText
 { 
 	// All of the Regular Expressions we use to match videos
 	// /s makes . match newlines
-	const YOUTUBE_RE = "/<object(.*?)<embed.*? src=[\"']http:\/\/(www.)?youtube.com\/v\/(.*?)([&\?].*?)[\"'](.*?)<\/object>/s";
+	const YOUTUBE_RE = "/<object(.*?)<embed.*? src=[\"']http:\/\/(www.)?youtube.com\/v\/(.*?)([&\?].*?)?[\"'](.*?)<\/object>/s";
 	const BRIGHTCOVE_RE = "/brightcove(.*?)@videoPlayer([\"'] *value)?=[\"']?(\d+)(.*?)<\/object>/is"; 
 	const BLIP_RE = "/<embed(.*?)src=[\"']http:\/\/blip.tv\/play\/([a-zA-Z0-9]*)(.*?)[\"'](.*?)<\/embed>(.*?<\/object>)?/s";
 	const JW_RE = "/<object.*?file=(.*?)[&\"].*?<\/object>/s";
