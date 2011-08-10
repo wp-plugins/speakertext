@@ -53,6 +53,9 @@ None.
 
 == Changelog ==
 
+= 1.4.3 =
+Add SoundCloud Support.
+
 = 1.4.2 =
 Support more YouTube embed codes.
 
